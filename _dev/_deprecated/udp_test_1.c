@@ -62,9 +62,9 @@ void milli_delay();
 */
 #define TRIG_PIN (2)
 #define ECHO_PIN (5)
-#define DATA_STRING_SIZE ((5+2+8)* sizeof(char))// 5 for distance, 2 for delimterers, 8 for timestamp
-#define PRODUCER_DELAY_MILLISECOND 30 // produce every X milliseconds
-#define CONSUMER_DELAY_MILLISECOND 75 // consume every X milliseconds
+#define DATA_STRING_SIZE ((5+3+8)* sizeof(char))// 5 for distance, 2 for delimterers, 8 for timestamp
+#define PRODUCER_DELAY_MILLISECOND 500 // produce every X milliseconds
+#define CONSUMER_DELAY_MILLISECOND 1000 // consume every X milliseconds
 #define DATA_PER_OUTPUT 5 // k data per output
 
 // for wifi
@@ -147,21 +147,19 @@ static void task_update_internal_time_with_sntp( void *pvParameters ){
 static void request_time_update(void){
     ESP_LOGI(TAG_RETREIVE, "retreiving time with SNTP protocol");
 
-    //start_wifi_connection();
-    //wait_until_wifi_connected();
+    start_wifi_connection();
+    wait_until_wifi_connected();
 
     update_time_with_sntp();
     wait_until_time_updated();
 
-    //stop_wifi_connection();
+    stop_wifi_connection();
 
 }
 static void initialize_utilities(void){
     ESP_LOGI(TAG_RETREIVE, "initializing utilities required for retreiving time with SNTP");
     initialize_non_volatile_storage();
     initialise_wifi();
-    start_wifi_connection();
-    wait_until_wifi_connected();
 }
 static void initialize_non_volatile_storage(void){
     ESP_LOGI(TAG_RETREIVE, "initializing non-volatile storage")
@@ -295,7 +293,7 @@ char* generate_data_string(){
 
     // build the data string
     char *data_string = (char*)malloc(DATA_STRING_SIZE);
-    sprintf(data_string, "%s;%05d#", strftime_buf, distance); // add terminator to end
+    sprintf(data_string, "%s;%d#", strftime_buf, distance); // add terminator to end
 
     // return the data
     return data_string;
@@ -330,16 +328,37 @@ void initialize_socket(){
 
     }
 
+    memset(&sa, 0, sizeof(struct sockaddr_in));
+    sa.sin_family = AF_INET;
+    sa.sin_addr.s_addr = inet_addr(SENDER_IP_ADDR);
+    sa.sin_port = htons(SENDER_PORT_NUM);
+
+
+    /* Bind the TCP socket to the port SENDER_PORT_NUM and to the current
+    * machines IP address (Its defined by SENDER_IP_ADDR).
+    * Once bind is successful for UDP sockets application can operate
+    * on the socket descriptor for sending or receiving data.
+    */
+    if (bind(socket_fd, (struct sockaddr *)&sa, sizeof(struct sockaddr_in)) == -1)
+    {
+      printf("Bind to Port Number %d ,IP address %s failed\n",SENDER_PORT_NUM,SENDER_IP_ADDR /*SENDER_IP_ADDR*/);
+      close(socket_fd);
+      exit(1);
+    }
+    printf("Bind to Port Number %d ,IP address %s SUCCESS!!!\n",SENDER_PORT_NUM,SENDER_IP_ADDR);
+
     memset(&ra, 0, sizeof(struct sockaddr_in));
     ra.sin_family = AF_INET;
     ra.sin_addr.s_addr = inet_addr(RECEIVER_IP_ADDR);
     ra.sin_port = htons(RECEIVER_PORT_NUM);
 
-
 }
-void send_udp_packet(char* total_output_string, int total_data_points){
+void send_udp_packet(char* total_output_string){
 
-    int sent_data = lwip_sendto_r(socket_fd, total_output_string, total_data_points*DATA_STRING_SIZE,0,(struct sockaddr*)&ra,sizeof(ra));
+    int sent_data; char data_buffer[80];
+
+    strcpy(data_buffer,"Hello World");
+    sent_data = lwip_sendto_r(socket_fd, data_buffer, sizeof("Hello World"),0,(struct sockaddr*)&ra,sizeof(ra));
     if(sent_data < 0)
     {
         printf("send failed\n");
@@ -350,20 +369,18 @@ void send_udp_packet(char* total_output_string, int total_data_points){
 }
 void output_data_from_queue(){
     // total data_string and queue_string
-    char *total_output_string = "";
+    char *total_output_string = "S#";
     char *queue_string = (char*)malloc(DATA_STRING_SIZE);
 
     // read data from queue
     //      read DATA_PER_OUTPUT times, untill queue is empty - then just finish
     int index;
-    int total_data_points = 0;
     for(index=0; index < DATA_PER_OUTPUT; index++){
         portBASE_TYPE queue_data = xQueueReceive(data_queue, queue_string, 10); // wait up to 10 ticks of blocking
         if(queue_data){
             // data was found - append it to the total output string
             //printf("from queue: %s\n", queue_string);
             total_output_string = concat(total_output_string, queue_string);
-            total_data_points++;
             //printf("total output string now: %s\n", total_output_string);
         } else {
             // no data was found - break the loop by seting index = DATA_PER_OUTPUT
@@ -371,13 +388,14 @@ void output_data_from_queue(){
             index=DATA_PER_OUTPUT;
         }
     }
+    total_output_string = concat(total_output_string, "E");
 
     // output the total data from queue buffer
     printf("final combined output string: %s\n", total_output_string);
     printf("%s\n", "-------");
 
     // send the data with udp
-    send_udp_packet(total_output_string, total_data_points);
+    send_udp_packet(total_output_string);
 
     // free the data
     free(queue_string);
