@@ -65,7 +65,8 @@ void milli_delay();
 #define DATA_STRING_SIZE ((5+2+8)* sizeof(char))// 5 for distance, 2 for delimterers, 8 for timestamp
 #define PRODUCER_DELAY_MILLISECOND 30 // produce every X milliseconds
 #define CONSUMER_DELAY_MILLISECOND 75 // consume every X milliseconds
-#define DATA_PER_OUTPUT 5 // k data per output
+#define DATA_PER_OUTPUT 10 // max k data per output
+#define QUEUE_SIZE 10 // how big the queue is
 
 // for wifi
 #define EXAMPLE_WIFI_SSID "Beach Bus" // iwgetid -r
@@ -420,7 +421,7 @@ void setup(){
     pinMode(ECHO_PIN, INPUT); // Sets the echoPin as an Input
 
     // init queue
-    data_queue = xQueueCreate(10, DATA_STRING_SIZE ); // create queue capable of holding 10 data strings at a time
+    data_queue = xQueueCreate(QUEUE_SIZE, DATA_STRING_SIZE ); // create queue capable of holding 10 data strings at a time
     if(data_queue != 0){
         printf("%s\n", "data_queue initialized successfully");
     }

@@ -11,7 +11,7 @@ This package does two things:
             - run `chmod +x ./init.sh` if you need to enable permission to execute the file
 3. configure the settings
     - 1. find the LAN-IP of your computer and set it as the `RECEIVER_IP_ADDR` in `main.c`
-    - 2. play with the `CONSUMER_DELAY_MILLISECOND` and `PRODUCER_DELAY_MILLISECOND` to tune them to your liking
+    - 2. play with the `CONSUMER_DELAY_MILLISECOND`, `PRODUCER_DELAY_MILLISECOND`, `DATA_PER_OUTPUT`, and `QUEUE_SIZE` to tune them to your liking
 2. run `./build --build --flash --monitor`
     - `--build` compiles the code
     - `--flash` ports it to the board
