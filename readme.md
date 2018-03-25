@@ -1,5 +1,9 @@
 This package does two things:
 1. reads data with the ESP-32 (the hard part)
+    - updates its clock
+    - pulses the ultrasonic sensor and translates the echo'd pulse duration into distance
+    - queues the distance readings for UDP output
+    - sends UDP packets containing lists of `timestamp;distance`
 2. receives data with the server (super easy)
 
 ### To load the program onto your board and run it you must:
