@@ -1,0 +1,181 @@
+Leaving...
+Hard resetting via RTS pin...
+MONITOR
+--- idf_monitor on /dev/ttyUSB0 115200 ---
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x12 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0018,len:4
+load:0x3fff001c,len:5660
+load:0x40078000,len:0
+load:0x40078000,len:13464
+entry 0x40078f74
+I (28) boot: ESP-IDF v3.1-dev-562-g8478823 2nd stage bootloader
+I (28) boot: compile time 19:44:02
+I (29) boot: Enabling RNG early entropy source...
+I (34) boot: SPI Speed  	: 40MHz
+I (38) boot: SPI Mode   	: DIO
+I (42) boot: SPI Flash Size : 4MB
+I (46) boot: Partition Table:
+I (50) boot: ## Label        	Usage      	Type ST Offset   Length
+I (57) boot:  0 nvs          	WiFi data    	01 02 00009000 00005000
+I (65) boot:  1 otadata      	OTA data     	01 00 0000e000 00002000
+I (72) boot:  2 app0         	OTA app      	00 10 00010000 00140000
+I (80) boot:  3 app1         	OTA app      	00 11 00150000 00140000
+I (87) boot:  4 eeprom       	Unknown data 	01 99 00290000 00001000
+I (95) boot:  5 spiffs       	Unknown data 	01 82 00291000 0016f000
+I (102) boot: End of partition table
+I (107) esp_image: segment 0: paddr=0x00010020 vaddr=0x3f400020 size=0x10d08 ( 68872) map
+I (139) esp_image: segment 1: paddr=0x00020d30 vaddr=0x3ffb0000 size=0x03288 ( 12936) load
+I (145) esp_image: segment 2: paddr=0x00023fc0 vaddr=0x40080000 size=0x00400 (  1024) load
+0x40080000: _iram_start at /home/giovanni/esp32/esp-idf/components/freertos/./xtensa_vectors.S:1685
+
+I (147) esp_image: segment 3: paddr=0x000243c8 vaddr=0x40080400 size=0x0bc48 ( 48200) load
+I (175) esp_image: segment 4: paddr=0x00030018 vaddr=0x400d0018 size=0x58468 (361576) map
+0x400d0018: _stext at ??:?
+
+I (301) esp_image: segment 5: paddr=0x00088488 vaddr=0x4008c048 size=0x02c80 ( 11392) load
+0x4008c048: xEventGroupSetBits at /home/giovanni/esp32/esp-idf/components/freertos/./event_groups.c:581
+
+I (306) esp_image: segment 6: paddr=0x0008b110 vaddr=0x400c0000 size=0x00000 ( 	0) load
+I (316) boot: Loaded app from partition at offset 0x10000
+I (316) boot: Disabling RNG early entropy source...
+I (319) cpu_start: Pro cpu up.
+I (323) cpu_start: Starting app cpu, entry point is 0x400811a4
+0x400811a4: call_start_cpu1 at /home/giovanni/esp32/esp-idf/components/esp32/./cpu_start.c:225
+
+I (0) cpu_start: App cpu up.
+I (333) heap_init: Initializing. RAM available for dynamic allocation:
+I (340) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM
+I (346) heap_init: At 3FFB9150 len 00026EB0 (155 KiB): DRAM
+I (352) heap_init: At 3FFE0440 len 00003BC0 (14 KiB): D/IRAM
+I (359) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM
+I (365) heap_init: At 4008ECC8 len 00011338 (68 KiB): IRAM
+I (371) cpu_start: Pro cpu start user code
+I (54) cpu_start: Starting scheduler on PRO CPU.
+I (0) cpu_start: Starting scheduler on APP CPU.
+data_queue initialized successfully
+I (102) retreive: initializing utilities required for retreiving time with SNTP
+I (102) retreive: initializing non-volatile storage
+I (112) retreive: initializing WIFI
+I (112) wifi: wifi firmware version: c202b34
+I (122) wifi: config NVS flash: enabled
+I (122) wifi: config nano formating: disabled
+I (122) system_api: Base MAC address is not set, read default base MAC address from BLK0 of EFUSE
+I (132) system_api: Base MAC address is not set, read default base MAC address from BLK0 of EFUSE
+I (162) wifi: Init dynamic tx buffer num: 32
+I (162) wifi: Init data frame dynamic rx buffer num: 32
+I (162) wifi: Init management frame dynamic rx buffer num: 32
+I (172) wifi: wifi driver task: 3ffc0788, prio:23, stack:4096
+I (172) wifi: Init static rx buffer num: 10
+I (172) wifi: Init dynamic rx buffer num: 32
+I (182) wifi: wifi power manager task: 0x3ffc53c8 prio: 21 stack: 2560
+I (192) retreive:	Setting WiFi configuration SSID BHNDG1670A92D2...
+I (192) retreive: 	WIFI initialized successfully
+I (202) retreive: starting WiFi radio and connection
+I (272) phy: phy_version: 383.0, 79a622c, Jan 30 2018, 15:38:06, 0, 0
+I (272) wifi: mode : sta (30:ae:a4:24:d0:64)
+I (272) retreive: waiting untill wifi has connected
+I (1002) wifi: n:6 0, o:1 0, ap:255 255, sta:6 0, prof:1
+I (1982) wifi: state: init -> auth (b0)
+I (1982) wifi: state: auth -> assoc (0)
+I (1992) wifi: state: assoc -> run (10)
+I (2242) wifi: connected with BHNDG1670A92D2, channel 6
+I (3072) event: sta ip: 192.168.0.17, mask: 255.255.255.0, gw: 192.168.0.1
+I (3072) retreive: wifi is now connected
+I (3072) app: time updater task started successfully
+I (3072) retreive: (!) Starting Update of Internal Wall-Clock Time Again...
+I (3082) app:    	Waiting for system time to be set... (1/10)
+I (3092) retreive: retreiving time with SNTP protocol
+I (3092) retreive: requesting update of time with SNTP
+I (3102) retreive: starting SNTP
+I (3112) retreive:	SNTP polling opened. Waiting untill time updated...
+I (3112) app:    	Waiting for system time to be set... (1/10)
+I (4992) wifi: pm start, type:0
+
+I (5092) retreive: (!) measuring and recording distance...
+I (5092) app: producer task started successfully
+I (5092) app: consumer task started successfully
+I (5122) retreive:	time has been updated. closed SNTP polling.
+I (5122) retreive: update of wall clock time has completed. entering task wait for 60 seconds
+final combined output string: 03:47:12;00014#
+-------
+data packet sent successfully!
+I (8092) retreive: (!) measuring and recording distance...
+I (11092) retreive: (!) measuring and recording distance...
+final combined output string: 03:47:15;00014#03:47:18;00014#
+-------
+data packet sent successfully!
+I (14092) retreive: (!) measuring and recording distance...
+I (17092) retreive: (!) measuring and recording distance...
+I (20092) retreive: (!) measuring and recording distance...
+final combined output string: 03:47:21;00014#03:47:24;00021#03:47:27;00021#
+-------
+data packet sent successfully!
+I (23092) retreive: (!) measuring and recording distance...
+I (26092) retreive: (!) measuring and recording distance...
+final combined output string: 03:47:30;00021#03:47:33;00021#
+-------
+data packet sent successfully!
+I (29092) retreive: (!) measuring and recording distance...
+I (32092) retreive: (!) measuring and recording distance...
+I (35092) retreive: (!) measuring and recording distance...
+final combined output string: 03:47:36;00021#03:47:39;00021#03:47:42;00028#
+-------
+data packet sent successfully!
+I (38092) retreive: (!) measuring and recording distance...
+I (41092) retreive: (!) measuring and recording distance...
+final combined output string: 03:47:45;00039#03:47:48;00039#
+-------
+data packet sent successfully!
+I (44092) retreive: (!) measuring and recording distance...
+I (47092) retreive: (!) measuring and recording distance...
+I (50092) retreive: (!) measuring and recording distance...
+final combined output string: 03:47:51;00039#03:47:54;00039#03:47:57;00006#
+-------
+data packet sent successfully!
+I (53092) retreive: (!) measuring and recording distance...
+I (56092) retreive: (!) measuring and recording distance...
+final combined output string: 03:48:00;00006#03:48:03;00006#
+-------
+data packet sent successfully!
+I (59092) retreive: (!) measuring and recording distance...
+I (62092) retreive: (!) measuring and recording distance...
+I (65092) retreive: (!) measuring and recording distance...
+I (65122) retreive: (!) Starting Update of Internal Wall-Clock Time Again...
+I (65122) retreive: retreiving time with SNTP protocol
+I (65122) retreive: requesting update of time with SNTP
+I (65122) retreive: starting SNTP
+I (65132) retreive:	SNTP polling opened. Waiting untill time updated...
+I (65142) retreive:	time has been updated. closed SNTP polling.
+I (65142) retreive: update of wall clock time has completed. entering task wait for 60 seconds
+final combined output string: 03:48:06;00006#03:48:09;00006#03:48:12;00006#
+-------
+data packet sent successfully!
+I (68092) retreive: (!) measuring and recording distance...
+I (71092) retreive: (!) measuring and recording distance...
+final combined output string: 03:48:15;00006#03:48:18;00006#
+-------
+data packet sent successfully!
+I (74092) retreive: (!) measuring and recording distance...
+I (77092) retreive: (!) measuring and recording distance...
+I (80092) retreive: (!) measuring and recording distance...
+final combined output string: 03:48:21;00006#03:48:24;00006#03:48:27;00003#
+-------
+data packet sent successfully!
+I (83092) retreive: (!) measuring and recording distance...
+I (86092) retreive: (!) measuring and recording distance...
+final combined output string: 03:48:30;00003#03:48:33;00003#
+-------
+data packet sent successfully!
+I (89092) retreive: (!) measuring and recording distance...
+I (92092) retreive: (!) measuring and recording distance...
+I (95092) retreive: (!) measuring and recording distance...
+final combined output string: 03:48:36;00003#03:48:39;00003#03:48:42;00003#
+-------
+data packet sent successfully!
+I (98092) retreive: (!) measuring and recording distance...

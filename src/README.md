@@ -1,41 +1,23 @@
-# Example: using LwIP SNTP module and time functions
+This package does two things:
+1. reads data with the ESP-32 (the hard part)
+    - updates its clock
+    - pulses the ultrasonic sensor and translates the echo'd pulse duration into distance
+    - queues the distance readings for UDP output
+    - sends UDP packets containing lists of `timestamp;distance`
+2. receives data with the server (super easy)
 
-This example demonstrates the use of LwIP SNTP module to obtain time from Internet servers. See the README.md file in the upper level 'examples' directory for more information about examples.
-
-## Obtaining time using LwIP SNTP module
-
-When this example boots first time after ESP32 is reset, it connects to WiFi and obtains time using SNTP.
-See `initialize_sntp` function for details.
-
-## Timekeeping
-
-Once time is synchronized, ESP32 will perform timekeeping using built-in timers.
-
-- RTC clock is used to maintain accurate time when chip is in deep sleep mode
-
-- FRC1 timer is used to provide time at microsecond accuracy when ESP32 is running.
-
-Timekeeping using RTC timer is demonstrated in this example by going into deep sleep mode. After wake up, ESP32 will print current time without connecting to WiFi.
-
-To use this functionality, make sure "Timers used for gettimeofday function" option in "ESP32-specific config" menu of menuconfig is set to "RTC and FRC1" or "RTC".
-
-## Working with time
-
-To get current time, [`gettimeofday`](http://man7.org/linux/man-pages/man2/gettimeofday.2.html) function may be used. Additionally the following [standard C library functions](https://en.cppreference.com/w/cpp/header/ctime) can be used to obtain time and manipulate it:
-
-	gettimeofday
-	time
-	asctime
-	clock
-	ctime
-	difftime
-	gmtime
-	localtime
-	mktime
-	strftime
-
-To set time, [`settimeofday`](http://man7.org/linux/man-pages/man2/settimeofday.2.html) POSIX function can be used. It is used internally in LwIP SNTP library to set current time when response from NTP server is received.
-
-## Timezones
-
-To set local timezone, use [`setenv`](http://man7.org/linux/man-pages/man3/setenv.3.html) and [`tzset`](http://man7.org/linux/man-pages/man3/tzset.3.html) POSIX functions. First, call `setenv` to set `TZ` environment variable to the correct value depending on device location. Format of the time string is described in [libc documentation](https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html). Next, call `tzset` to update C library runtime data for the new time zone. Once these steps are done, `localtime` function will return correct local time, taking time zone offset and daylight saving time into account.
+### To load the program onto your board and run it you must:
+1. setup the environment
+    - part 1: setup espressif framework
+        - see the instructions in the file `_dev/setup_and_hello_world.sh`
+    - part 2: setup the arduino component for espressif
+        - run `./init.sh`
+            - run `chmod +x ./init.sh` if you need to enable permission to execute the file
+3. configure the settings
+    - 1. find the LAN-IP of your computer and set it as the `RECEIVER_IP_ADDR` in `main.c`
+    - 2. play with the `CONSUMER_DELAY_MILLISECOND`, `PRODUCER_DELAY_MILLISECOND`, `DATA_PER_OUTPUT`, and `QUEUE_SIZE` to tune them to your liking
+2. run `./build --build --flash --monitor`
+    - `--build` compiles the code
+    - `--flash` ports it to the board
+    - `--monitor` restarts the board and displays the output of the board
+        - e.g., logs; it shows you the serial port
